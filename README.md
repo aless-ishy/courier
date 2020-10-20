@@ -11,7 +11,7 @@ Acesse o cli do PostgreSQL.
 sudo -u postgres psql
 ```
 #### 1 - Criar Usuário
-Caso já tenha um usuário para acessar o banco de dados, pode pular essa etapa e trocar o nome e senha utilizados pelos seus no arquivo _**.env**_ na pasta _**server**_. 
+Caso já tenha um usuário para acessar o banco de dados, pode pular essa etapa e trocar o nome e senha utilizados no arquivo _**.env**_ na pasta _**server**_. 
 
 Será criado um usuário com nome _**aless**_ e senha _**123**_
 ```
@@ -75,8 +75,6 @@ Nome e Endereço são obrigatórios.
 O cliente pode ser escolhido de uma lista ou criado com o pedido. Para isso, é necessário clicar no botão ao lado permitindo a edição completa dos campos.
 
 Para adicionar itens a lista de produtos, clique no botão de expandir e utilize o botão de adicionar produtos.
-
-A lista de produtos pode ser carregada, ou apenas exibida quando em modo de criação, ao clicar no botão de expandir.
 
 O total mostrado é igual ao valor informado pela API, quando não se carregou a lista de produtos, caso contrário o total fica de acordo com a lista de produtos.
 
