@@ -10,6 +10,8 @@ import addClientIcon from "../assets/icons/addClient.svg";
 import addProductIcon from "../assets/icons/addProduct.svg";
 import clientIcon from "../assets/icons/client.svg";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import {isNumber} from "./ProductCard";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 
 class OrderCard extends Component {
@@ -184,7 +186,7 @@ class OrderCard extends Component {
                                        variant="filled"
                                        label="Produto"/>)}/>
                 </div>
-                <div>
+                <div style={{width: 200}}>
                     <TextField color={color}
                                variant="filled"
                                id={"product_quantity" + this.props.id + "" + id}
@@ -194,14 +196,16 @@ class OrderCard extends Component {
                                onChange={e => parseInt(e.target.value) > 0 && this.setProduct(id, {quantidade: "" + parseInt(e.target.value)})
                                }/>
                 </div>
-                <div>
+                <div style={{width: 200}}>
                     <TextField color={color}
                                variant="filled"
                                id={"value" + this.props.id + "" + id}
                                label="Valor Unitário"
-                               type="number"
                                value={product.valor}
-                               onChange={e => e.target.value > 0 && this.setProduct(id, {valor: e.target.value})}/>
+                               InputProps={{
+                                   startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                               }}
+                               onChange={e => isNumber(e.target.value) && e.target.value >= 0 && this.setProduct(id, {valor: e.target.value})}/>
                 </div>
             </div>
         );
@@ -225,7 +229,7 @@ class OrderCard extends Component {
             if (this.props.failure.clienteId)
                 sizeAdjust = 22;
             else if (this.props.failure.cliente)
-                if (this.props.failure.cliente.endereco || this.props.cliente.nome)
+                if (this.props.failure.cliente.endereco || this.props.failure.cliente.nome)
                     sizeAdjust = 22;
         }
         const color = this.props.variant === "create" ? "secondary" : "primary";
@@ -273,7 +277,7 @@ class OrderCard extends Component {
         }
 
         const specificsAttributes = (
-            <div className="order-specifics" style={{width: this.props.data ? 430 : 250}}>
+            <div className="order-specifics" style={{width: this.props.data ? 446 : 266}}>
                 <div>
                     <Autocomplete
                         id={"auto_status" + this.props.id}
@@ -281,7 +285,7 @@ class OrderCard extends Component {
                         disableClearable
                         value={this.state.status}
                         onChange={(e, newValue) => this.setState({status: newValue})}
-                        style={{width: 140}}
+                        style={{width: 133}}
                         renderInput={(params) => (
                             <TextField {...params} color={color}
                                        variant="filled"
@@ -290,13 +294,16 @@ class OrderCard extends Component {
                                        label="Status"/>
                         )}/>
                 </div>
-                <div style={{width: 80}}>
+                <div style={{width: 103}}>
                     <TextField color={color}
                                variant="filled"
                                id={"total" + this.props.id}
                                label="Total"
                                fullWidth
                                disabled
+                               InputProps={{
+                                   startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                               }}
                                value={this.state.isProductsLoaded ? this.getTotal() : this.state.total}/>
                 </div>
                 {this.props.data &&
@@ -314,6 +321,7 @@ class OrderCard extends Component {
         const clientNameField = this.state.createClient ? (
             <TextField color={color}
                        variant="filled"
+                       fullWidth
                        id={"client_name" + this.props.id}
                        label="Nome"
                        error={Boolean(this.props.failure && this.props.failure.cliente && this.props.failure.cliente.nome)}
@@ -331,6 +339,7 @@ class OrderCard extends Component {
                 renderInput={(params) => (
                     <TextField {...params} color={color}
                                variant="filled"
+                               fullWidth
                                error={Boolean(this.props.failure && this.props.failure.clienteId)}
                                helperText={this.props.failure && this.props.failure.clienteId}
                                id={"client_name" + this.props.id}
@@ -338,12 +347,13 @@ class OrderCard extends Component {
         );
         const clientAttributes = (
             <div className="client-attributes">
-                <div>
+                <div style={{width: 200}}>
                     {clientNameField}
                 </div>
-                <div>
+                <div style={{width: 200}}>
                     <TextField color={color}
                                variant="filled"
+                               fullWidth
                                id={"address" + this.props.id}
                                disabled={!this.state.createClient}
                                error={Boolean(this.props.failure && this.props.failure.cliente && this.props.failure.cliente.endereco)}
@@ -352,9 +362,10 @@ class OrderCard extends Component {
                                value={this.state.createClient ? this.state.endereco : this.state.selectedClient ? this.state.selectedClient.endereco ? this.state.selectedClient.endereco : "" : ""}
                                onChange={e => this.setState({endereco: e.target.value})}/>
                 </div>
-                <div>
+                <div style={{width: 200}}>
                     <TextField color={color}
                                variant="filled"
+                               fullWidth
                                id={"phone" + this.props.id}
                                disabled={!this.state.createClient}
                                label="Telefone"
@@ -402,7 +413,7 @@ class OrderCard extends Component {
                                   style={rightStyle}
                                   onClick={this.props.onRightClick}/>
                     <div style={{height: 57}}/>
-                    <CircleButton style={this.state.isExpanded ? contractStyle : expandStyle}
+                    <CircleButton style={this.state.isExpanded ? expandStyle : contractStyle}
                                   icon={expandIcon}
                                   onClick={this.loadProducts}/>
                     {this.state.isExpanded &&

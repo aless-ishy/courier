@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch) => {
 class ClientContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = {isAddingClient: false};
+        this.state = {isAddingClient: false, failureMap: {}};
         this.createClient = this.createClient.bind(this);
         this.updateClient = this.updateClient.bind(this);
         this.deleteClient = this.deleteClient.bind(this);
@@ -46,14 +46,30 @@ class ClientContainer extends Component {
 
     createClient(client) {
         const failure = errorsInClient(client);
-        if (!failure)
+        if (!failure) {
             this.props.createClient(client).then(this.setState({isAddingClient: false}));
+            const failureMap = this.state.failureMap;
+            failureMap[client.id || -1] = undefined;
+            this.setState({failureMap});
+        } else {
+            const failureMap = this.state.failureMap;
+            failureMap[client.id || -1] = failure;
+            this.setState({failureMap});
+        }
     }
 
     updateClient(client) {
         const failure = errorsInClient(client);
-        if (!failure)
+        if (!failure) {
             this.props.updateClient(client);
+            const failureMap = this.state.failureMap;
+            failureMap[client.id || -1] = undefined;
+            this.setState({failureMap});
+        } else {
+            const failureMap = this.state.failureMap;
+            failureMap[client.id || -1] = failure;
+            this.setState({failureMap});
+        }
     }
 
     deleteClient(id) {
@@ -76,19 +92,23 @@ class ClientContainer extends Component {
             <div className="container">
                 <div className="container-actions">
                     {!this.state.isAddingClient &&
-                    <CircleButton style={addStyle} imgStyle={{width:32,height:32}} icon={addClientIcon}
+                    <CircleButton style={addStyle} imgStyle={{width: 32, height: 32}} icon={addClientIcon}
                                   onClick={() => this.setState({isAddingClient: true})}/>
                     }
                 </div>
                 <div className="card-list">
                     {this.state.isAddingClient &&
-                    <ClientCard variant="create" onLeftClick={this.createClient}
+                    <ClientCard variant="create"
+                                id="create_client"
+                                failure={this.state.failureMap["create_client"]}
+                                onLeftClick={this.createClient}
                                 onRightClick={() => this.setState({isAddingClient: false})}/>
                     }
                     {this.props.clients.map(client => <ClientCard key={client.id}
                                                                   nome={client.nome}
                                                                   endereco={client.endereco}
                                                                   telefone={client.telefone}
+                                                                  failure={this.state.failureMap[client.id]}
                                                                   id={client.id}
                                                                   onRightClick={() => this.deleteClient(client.id)}
                                                                   onLeftClick={this.updateClient}/>)}

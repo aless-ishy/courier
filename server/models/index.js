@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(
-    `postgres://${process.env.DATABASE_USER}:${process.env.PASSWORD}@localhost/${process.env.DATABASE}`,
+    `postgres://${process.env.DATABASE_USER}:${process.env.PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE}`,
     {dialect: 'postgres'}
 );
 const Cliente = require('./clienteModel')(sequelize, Sequelize);

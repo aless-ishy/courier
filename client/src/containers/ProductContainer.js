@@ -20,7 +20,7 @@ const errorsInProduct = product => {
         failed = true;
     }
     if (!product.preco || !product.preco.trim()) {
-        failure.codigo = "Preço Inválido";
+        failure.preco = "Preço Inválido";
         failed = true;
     }
     return failed ? failure : false;
@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => {
 class ProductContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = {isAddingProduct: false};
+        this.state = {isAddingProduct: false,failureMap: {}};
         this.createProduct = this.createProduct.bind(this);
         this.updateProduct = this.updateProduct.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
@@ -54,6 +54,13 @@ class ProductContainer extends Component {
             product = {...product};
             product.preco = parseFloat(product.preco);
             this.props.createProduct(product).then(this.setState({isAddingProduct: false}));
+            const failureMap = this.state.failureMap;
+            failureMap[product.id || -1] = undefined;
+            this.setState({failureMap});
+        }else {
+            const failureMap = this.state.failureMap;
+            failureMap[product.id || -1] = failure;
+            this.setState({failureMap});
         }
     }
 
@@ -63,6 +70,13 @@ class ProductContainer extends Component {
             product = {...product};
             product.preco = parseFloat(product.preco);
             this.props.updateProduct(product);
+            const failureMap = this.state.failureMap;
+            failureMap[product.id || -1] = undefined;
+            this.setState({failureMap});
+        }else {
+            const failureMap = this.state.failureMap;
+            failureMap[product.id || -1] = failure;
+            this.setState({failureMap});
         }
     }
 
@@ -92,7 +106,10 @@ class ProductContainer extends Component {
                 </div>
                 <div className="card-list">
                     {this.state.isAddingProduct &&
-                    <ProductCard variant="create" onLeftClick={this.createProduct}
+                    <ProductCard variant="create"
+                                 id={"create_product"}
+                                 failure={this.state.failureMap["create_product"]}
+                                 onLeftClick={this.createProduct}
                                  onRightClick={() => this.setState({isAddingProduct: false})}/>
                     }
                     {this.props.products.map(product => <ProductCard key={product.id}
@@ -101,6 +118,7 @@ class ProductContainer extends Component {
                                                                      preco={product.preco}
                                                                      descricao={product.descricao}
                                                                      id={product.id}
+                                                                     failure={this.state.failureMap[product.id]}
                                                                      onRightClick={() => this.deleteProduct(product.id)}
                                                                      onLeftClick={this.updateProduct}/>)}
                 </div>

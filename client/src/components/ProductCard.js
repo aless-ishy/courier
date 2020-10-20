@@ -5,9 +5,10 @@ import saveIcon from "../assets/icons/save.svg";
 import CircleButton from "./CircleButton";
 import TextField from "@material-ui/core/TextField";
 import deleteIcon from "../assets/icons/delete.svg";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const regex = /^\d+(\.?\d*)$/
-const isNumber = (text) => {
+export const isNumber = (text) => {
     return text.match(regex) || !text.trim();
 };
 
@@ -24,6 +25,7 @@ class ProductCard extends Component {
     }
 
     render() {
+        const failure = this.props.failure || {};
         const cardStyle = {};
         const leftStyle = {backgroundColor: "rgb(242, 205, 141)"};
         const rightStyle = {
@@ -52,6 +54,8 @@ class ProductCard extends Component {
                                    variant="filled"
                                    fullWidth
                                    label="Nome"
+                                   error={Boolean(failure.nome)}
+                                   helperText={failure.nome}
                                    value={this.state.nome}
                                    onChange={e => this.setState({nome: e.target.value})}/>
                     </div>
@@ -60,6 +64,8 @@ class ProductCard extends Component {
                                    id={"code" + this.props.id}
                                    variant="filled"
                                    fullWidth
+                                   error={Boolean(failure.codigo)}
+                                   helperText={failure.codigo}
                                    label="Codigo"
                                    value={this.state.codigo}
                                    onChange={e => this.setState({codigo: e.target.value})}/>
@@ -69,6 +75,11 @@ class ProductCard extends Component {
                                    id={"price" + this.props.id}
                                    variant="filled"
                                    fullWidth
+                                   error={Boolean(failure.preco)}
+                                   helperText={failure.preco}
+                                   InputProps={{
+                                       startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                                   }}
                                    label="Preço"
                                    value={this.state.preco}
                                    onChange={e => isNumber(e.target.value) && this.setState({preco: e.target.value})}/>

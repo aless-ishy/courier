@@ -2,27 +2,29 @@
 ## Requisitos
 * Node.js
 * npm
-* Postgress
+* PostgreSQL
 ## Instalação
 Os comandos a seguir foram utilizados no Ubuntu 18.4.5 . 
 ### Configurando o Banco de Dados
+Acesse o cli do PostgreSQL.
+```
+sudo -u postgres psql
+```
 #### 1 - Criar Usuário
 Caso já tenha um usuário para acessar o banco de dados, pode pular essa etapa e trocar o nome e senha utilizados pelos seus no arquivo _**.env**_ na pasta _**server**_. 
 
 Será criado um usuário com nome _**aless**_ e senha _**123**_
 ```
-sudo -u postgres createuser --interactive
-```
-```
-sudo -u postgres psql
-ALTER USER aless WITH PASSWORD '123';
+CREATE USER aless WITH PASSWORD '123';
 ```
 #### 2 - Criar Database
-A database criada será chamada de _**transportadora**_, caso queira utilizar outro nome, basta trocar o nome no arquivo _**.env**_
+A base de dados criada será chamada de _**transportadora**_, caso queira utilizar outro nome, basta trocar o nome no script abaixo e no arquivo _**.env**_
 ```
-sudo -u postgres createdb transportadora
+CREATE DATABASE transportadora;
+GRANT ALL PRIVILEGES ON DATABASE "transportadora" to aless;
 ```
 ### Configurando o Servidor
+Os comandos abaixo serão executados dentro da pasta _**server**_.
 #### 1 - Preencher credenciais do Banco de Dados
 No arquivo _**.env**_ na pasta _**server**_ preencha o campo _**DATABASE_USER**_ com o nome de usuário no banco de dados e o campo _**PASSWORD**_ com a senha desse usuário. No campo _**DATABASE**_ insira o nome da base de dados criada na etapa anterior.
 ```
@@ -32,11 +34,17 @@ DATABASE_USER=aless
 PASSWORD=123
 DATABASE=transportadora
 ```
-#### 2 - Executar
+#### 2 - Instalar Dependências
 ```
-npm start
+~/server$ npm install
+```
+#### 3 - Executar
+```
+~/server$ npm start
 ```
 ## Views
+A aplicação utilizando react já está configurada para ser servida através do servidor iniciado anteriormente. 
+Ela pode ser acessada em _http://localhost:5000_
 ### Ações Padronizadas
 #### Salvar Registro Criado
 ![Salvar Registro](client/screenshots/saveButton.png)
@@ -48,19 +56,19 @@ npm start
 #### Botão de Criar
 ![Criar Modelo](client/screenshots/createClientButton.png)
 ##### Template Gerado
-![Deletar Registro](client/screenshots/createClientModel.png)
+![Template Cliente](client/screenshots/createClientModel.png)
 
 Nome e Endereço são obrigatórios.
 ### Produtos
 #### Botão de Criar
 ![Criar Modelo](client/screenshots/createProductButton.png)
 ##### Template Gerado
-![Deletar Registro](client/screenshots/createProductModel.png)
+![Template Produto](client/screenshots/createProductModel.png)
 ### Pedidos
 #### Botão de Criar
 ![Criar Modelo](client/screenshots/createOrderButton.png)
 #### Template Gerado
-![Deletar Registro](client/screenshots/createOrderModel.png)
+![Template Pedido](client/screenshots/createOrderModel.png)
 
 O cliente pode ser escolhido de uma lista ou criado com o pedido. Para isso, é necessário clicar no botão ao lado permitindo a edição completa dos campos.
 
@@ -78,7 +86,7 @@ Caso a lista de produtos não tenha sido carregada, atualizações não serão r
 #### Create
 ###### Method _POST_ 
 ###### URI _http://localhost:5000/api/clientes/:id_
-Os atributos _nome_ e _endereco_ são obrigatórios e não podem conter strings vazias, _telefone_ é opcional.
+Os atributos _**nome**_ e _**endereco**_ são obrigatórios e não podem conter strings vazias, _**telefone**_ é opcional.
 ##### Body
 ```json
 {
@@ -176,7 +184,7 @@ Utilizando o mesmo exemplo em _**Retrieve One**_
 |---|---|---|---|---|
 #### Create
 ###### Method _POST_ 
-###### URI _http://localhost:5000/api/produtos_/
+###### URI _http://localhost:5000/api/produtos/_
 Os atributos _**nome**_ e _**codigo**_ são obrigatórios e não podem conter strings vazias, __**preco**__ também é obrigatório, somente _**descricao**_ não é.
 ##### Body
 ```json
@@ -282,10 +290,10 @@ Os atributos _**nome**_ e _**codigo**_ são obrigatórios e não podem conter st
 
 #### Create
 ###### Method _POST_ 
-###### URI _http://localhost:5000/api/pedidos_/
-Os atributos _clienteId_ e _produtos_ são obrigatórios. O atributo _status_ é gerado no valor "Aberto" caso não seja informado, o atributo aceita apenas os valores "Aberto", "Entregue" e "Cancelado". A _data_ é inicializada com a data de criação do pedido e não pode ser alterada.
+###### URI _http://localhost:5000/api/pedidos/_
+Os atributos _**clienteId**_ e _**produtos**_ são obrigatórios. O atributo _**status**_ é gerado no valor "Aberto" caso não seja informado, o atributo aceita apenas os valores "Aberto", "Entregue" e "Cancelado". A _**data**_ é inicializada com a data de criação do pedido e não pode ser alterada.
 
-O atributo _produtos_ deve conter uma lista, vazia ou não, com itens na seguinte maneira. Caso o atributo _valorUnitario_ não seja informado, ele será preenchido com o preço padrão do produto.
+O atributo _**produtos**_ deve conter uma lista, vazia ou não, com itens na seguinte maneira. Caso o atributo _**valorUnitario**_ não seja informado, ele será preenchido com o preço padrão do produto.
 ##### Formato de _produto_
 ```json
 {  

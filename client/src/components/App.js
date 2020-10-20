@@ -10,7 +10,7 @@ function App() {
     return (
         <div className="App">
             <Header/>
-            <Route path="/clientes">
+            <Route path={["/clientes", "/"]} exact>
                 <ClientContainer/>
             </Route>
             <Route path="/produtos">

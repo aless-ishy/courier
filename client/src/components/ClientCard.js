@@ -18,6 +18,7 @@ class ClientCard extends Component {
     }
 
     render() {
+        const failure = this.props.failure || {};
         const cardStyle = {};
         const leftStyle = {backgroundColor: "rgb(242, 205, 141)"};
         const rightStyle = {
@@ -40,25 +41,32 @@ class ClientCard extends Component {
                                   onClick={() => this.props.onLeftClick && this.props.onLeftClick(this.state)}/>
                 </div>
                 <div className="attributes">
-                    <div>
+                    <div style={{width:200}}>
                         <TextField color={color}
                                    variant="filled"
                                    id={"client_name" + this.props.id}
                                    label="Nome"
+                                   fullWidth
+                                   error={Boolean(failure.nome)}
+                                   helperText={failure.nome}
                                    value={this.state.nome}
                                    onChange={e => this.setState({nome: e.target.value})}/>
                     </div>
-                    <div>
+                    <div style={{width:200}}>
                         <TextField color={color}
                                    variant="filled"
                                    id={"address" + this.props.id}
                                    label="Endereço"
+                                   fullWidth
+                                   error={Boolean(failure.endereco)}
+                                   helperText={failure.endereco}
                                    value={this.state.endereco}
                                    onChange={e => this.setState({endereco: e.target.value})}/>
                     </div>
-                    <div>
+                    <div style={{width:200}}>
                         <TextField color={color}
                                    variant="filled"
+                                   fullWidth
                                    id={"phone" + this.props.id}
                                    label="Telefone"
                                    value={this.state.telefone}
