@@ -47,13 +47,17 @@ class OrderCard extends Component {
     }
 
     loadProducts() {
+        let products = this.state.products;
+        if (products && products.length === 0 && this.props.products && this.props.products.length > 0)
+            products = [...this.props.products];
         if (!this.props.loadProducts)
             return this.setState({
                 isExpanded: !this.state.isExpanded,
-                isProductsLoaded: true
+                isProductsLoaded: true,
+                products
             });
         else if (this.state.isExpanded)
-            return this.setState({isExpanded: false});
+            return this.setState({isExpanded: false, products});
         this.props.loadProducts().then(() => this.setState({
             products: [...this.props.products],
             isExpanded: true,

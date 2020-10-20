@@ -1,10 +1,10 @@
-# Courier
+# Desafio DouraSoft
 ## Requisitos
 * Node.js
 * npm
 * PostgreSQL
 ## Instalação
-Os comandos a seguir foram utilizados no Ubuntu 18.4.5 . 
+Os comandos a seguir foram utilizados no Ubuntu 18.04.5 . 
 ### Configurando o Banco de Dados
 Acesse o cli do PostgreSQL.
 ```
@@ -69,8 +69,12 @@ Nome e Endereço são obrigatórios.
 ![Criar Modelo](client/screenshots/createOrderButton.png)
 #### Template Gerado
 ![Template Pedido](client/screenshots/createOrderModel.png)
+#### Template Expandido
+![Template Expandido](client/screenshots/createModelExpanded.png)
 
 O cliente pode ser escolhido de uma lista ou criado com o pedido. Para isso, é necessário clicar no botão ao lado permitindo a edição completa dos campos.
+
+Para adicionar itens a lista de produtos, clique no botão de expandir e utilize o botão de adicionar produtos.
 
 A lista de produtos pode ser carregada, ou apenas exibida quando em modo de criação, ao clicar no botão de expandir.
 

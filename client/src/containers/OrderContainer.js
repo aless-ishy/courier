@@ -186,7 +186,9 @@ class OrderContainer extends Component {
                 {this.state.isClientsLoaded && this.state.isProductsLoaded &&
                 <div className="card-list">
                     {this.state.isAddingOrder &&
-                    <OrderCard variant="create" id="create_order" clientOptions={this.props.clients}
+                    <OrderCard variant="create"
+                               id="create_order"
+                               clientOptions={this.props.clients}
                                productOptions={this.props.products}
                                failure={this.state.failureMap["create_order"]}
                                onLeftClick={this.createOrder}
